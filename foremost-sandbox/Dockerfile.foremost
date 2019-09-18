@@ -1,0 +1,9 @@
+FROM ubuntu:19.04
+
+LABEL maintainer="githubfoam "
+
+RUN apt-get update && \
+    apt-get install -y foremost
+
+ENTRYPOINT ["foremost"]
+CMD ["--help"]

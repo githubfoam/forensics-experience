@@ -1,0 +1,4 @@
+---
+- hosts: imageforensic01
+  roles:
+  - common

@@ -1,0 +1,45 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+# All Vagrant configuration is done below. The "2" in Vagrant.configure
+# configures the configuration version (we support older styles for
+# backwards compatibility). Please don't change it unless you know what
+# you're doing.
+
+# http://fotoforensics.com/
+# https://python-pillow.org/
+
+Vagrant.configure("2") do |config|
+  config.vm.provider "virtualbox" do |vb|
+    vb.gui = false
+    vb.memory = "512"
+    vb.cpus = 1
+  end
+
+      config.vm.define "imageforensic01" do |webtier|
+        webtier.vm.box = "bento/ubuntu-16.04"
+        webtier.vm.hostname = "imageforensic01"
+        webtier.vm.network "private_network", ip: "192.168.45.12"
+        webtier.vm.provider "virtualbox" do |vb|
+            vb.name = "imageforensic01"
+        end
+        webtier.vm.provision "ansible_local" do |ansible|
+        ansible.playbook = "deploy.yml"
+        ansible.become = true
+        end
+          webtier.vm.provision "shell", inline: <<-SHELL
+              sudo apt-get update -y
+              sudo apt-get install -y python-pip
+              sudo pip install virtualenv
+              # mkdir ~/lab1
+              # sudo virtualenv ~/lab1/ela
+              # cd ~/lab1/ela/bin/
+              # source activate
+              # sudo pip install Pillow
+              # python /vagrant/ela.py --dir /vagrant/images/
+              # deactivate
+              echo "imageforensic01 up && running"
+        SHELL
+        end
+
+end
