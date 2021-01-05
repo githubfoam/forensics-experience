@@ -1,0 +1,55 @@
+
+
+name: "djifix CI workflow"
+
+
+on:
+  push:
+    branches: [ dev ]
+  pull_request:
+    branches: [ dev ]
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+
+  djifix-linux-job:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v1
+    - name: "os fingerprinting"
+      run: hostnamectl status
+    - name: "make"
+      run: make  
+    - name: "make install"
+      run: make install  
+    - name: "djifix use"
+      run: |
+            djifix path/to/video/DJI_XYZW
+            ffmpeg -i DJI_XYZW-repaired.h264 -c copy DJI_XYZW-repaired.mp4                 
+    # - name: "build gradle w findbugs codecov on - Debian GNU/Linux 10 (buster) x86_64"
+    #   run: |
+    #         echo "=============================build gradle w findbugs codecov============================================================="
+    #         java -version
+    #         gradle -v
+    #         cd gradle-pipeline && chmod +x gradlew
+    #         ./gradlew jacocoTestReport
+    #         echo "=============================build gradle w findbugs codecov============================================================="
+    # - name: "upload codecov"
+    #   run: bash <(curl -s https://codecov.io/bash)
+
+  windows:
+    runs-on: windows-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v1
+    - name: Run a one-line script
+      run: echo Hello, world!
+
+  macos:
+    runs-on: macos-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v1
+    - name: Run a one-line script
+      run: echo Hello, world!
