@@ -1,5 +1,7 @@
 # forensics-experience
 
+[![process accounting CI workflow](https://github.com/githubfoam/forensics-experience/actions/workflows/process-accounting-workflow.yml/badge.svg?branch=master)](https://github.com/githubfoam/forensics-experience/actions/workflows/process-accounting-workflow.yml)  
+
 UAV - Unmanned aerial vehicle forensics
 ~~~~
 DatCon 
