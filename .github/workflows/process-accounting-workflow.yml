@@ -145,7 +145,10 @@ jobs:
         set -o pipefail
         set -o nounset
         set -o xtrace   
+        sudo service acct start
         sudo service acct status        
+        sudo service acct stop
+        sudo service acct status
 
   # ubuntu-1604-job:
   #   name: "osquery on ubuntu-16.04"
