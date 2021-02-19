@@ -63,15 +63,15 @@ jobs:
         sudo dump-acct /var/log/account/pacct | tail
         sudo dump-acct /var/log/account/pacct | tail -5
         # sudo dump-acct /var/log/account/pacct | awk -F'|' '$6 ~ / 1000$/'
-        systemctl status acct
+        sudo systemctl status acct
         sudo /usr/sbin/accton off
-        systemctl status acct
+        sudo systemctl status acct
         sudo /usr/sbin/accton on
-        systemctl status acct
-        systemctl stop acct
-        systemctl status acct
-        systemctl start acct
-        systemctl status acct
+        sudo systemctl status acct
+        sudo systemctl stop acct
+        sudo systemctl status acct
+        sudo systemctl start acct
+        sudo systemctl status acct
         #chkconfig acct on
         #sa will print information about all of the commands in the acct file
         sa 
