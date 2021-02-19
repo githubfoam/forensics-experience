@@ -59,7 +59,7 @@ jobs:
         set -o xtrace      
         ls -lai /var/log/account   
         ls -lai /var/log/account/pacct
-        sudo /usr/sbin/a*
+        sudo ls -lai /usr/sbin/a*
         sudo dump-acct /var/log/account/pacct | tail
         sudo dump-acct /var/log/account/pacct | tail -5
         sudo dump-acct /var/log/account/pacct | awk -F'|' '$6 ~ / 1000$/'
