@@ -42,9 +42,7 @@ jobs:
         # set -o nounset
         # set -o xtrace      
         sudo sa -u | grep runner # averages for the all the activity for this server overtime        
-        #combined total for a specific user
-        #sudo sa -u |grep username|awk ‘BEGIN{TOTAL=0}{TOTAL=TOTAL+$2}END{print TOTAL}’
-    - name: "lastcomm command"
+    - name: "sa command"
       run: |
         set -o errexit
         set -o pipefail
@@ -57,8 +55,10 @@ jobs:
         #print the number of processes and number of CPU minutes on a per-user basis
         sa -m 
         #Show userid and command name executed by each user 
-        sa -u       
-    - name: " the file in which the data will be saved"
+        sa -u
+        #combined total for a specific user
+        #sudo sa -u |grep username|awk ‘BEGIN{TOTAL=0}{TOTAL=TOTAL+$2}END{print TOTAL}’               
+    - name: "dump-acct command"
       run: |
         set -o errexit
         set -o pipefail
@@ -70,16 +70,6 @@ jobs:
         sudo dump-acct /var/log/account/pacct | tail
         sudo dump-acct /var/log/account/pacct | tail -5
         # sudo dump-acct /var/log/account/pacct | awk -F'|' '$6 ~ / 1000$/'
-        sudo systemctl status acct
-        # sudo /usr/sbin/accton off
-        # sudo systemctl status acct
-        # sudo /usr/sbin/accton on
-        # sudo systemctl status acct
-        # sudo systemctl stop acct
-        # sudo systemctl status acct
-        # sudo systemctl start acct
-        # sudo systemctl status acct
-        #chkconfig acct on
     - name: "ac command"
       run: |
         set -o errexit
@@ -98,11 +88,11 @@ jobs:
         set -o xtrace                       
         #prints out information about previously executed commands, it uses the file acct
         #Find the commands executed by the user test1
-        #lastcomm test1
+        lastcomm runner
         #print info about all of the commands in acct(the record file)
-        #lastcomm
-        #finding which user has added the new user
-        #lastcomm adduser   
+        lastcomm
+        #finding which user has run "sa" command
+        lastcomm sa   
     - name: "last command"
       run: |
         set -o errexit
@@ -114,7 +104,24 @@ jobs:
         #the file on the Linux, Solaris, and BSD operating systems that keeps a history of all logins and logouts
         #/var/log/wtmp
         last        
+    - name: "start/stop/status acc"
+      run: |
+        set -o errexit
+        set -o pipefail
+        set -o nounset
+        set -o xtrace      
+        sudo systemctl status acct
+        sudo /usr/sbin/accton off
+        sudo systemctl status acct
+        # sudo /usr/sbin/accton on
+        # sudo systemctl status acct
+        # sudo systemctl stop acct
+        # sudo systemctl status acct
+        # sudo systemctl start acct
+        # sudo systemctl status acct
+        #chkconfig acct on
 
+        
   # ubuntu-1604-job:
   #   name: "osquery on ubuntu-16.04"
   #   runs-on: ubuntu-16.04
