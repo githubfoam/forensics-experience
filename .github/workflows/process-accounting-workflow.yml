@@ -115,40 +115,8 @@ jobs:
         sudo systemctl status acct
         sudo /usr/sbin/accton off
         sudo systemctl status acct
-        # sudo /usr/sbin/accton on
-        # sudo systemctl status acct
-        # sudo systemctl stop acct
-        # sudo systemctl status acct
-        # sudo systemctl start acct
-        # sudo systemctl status acct
-        #chkconfig acct on
-    - name: "start/stop/status acc"
-      run: |
-        set -o errexit
-        set -o pipefail
-        set -o nounset
-        set -o xtrace      
-        # sudo systemctl status acct
-        # sudo /usr/sbin/accton off
-        # sudo systemctl status acct
-        # sudo /usr/sbin/accton on
-        sudo service acct status
-        sudo systemctl status acct
-        sudo systemctl stop acct
-        # sudo systemctl status acct
-        # sudo systemctl start acct
-        # sudo systemctl status acct
-        #chkconfig acct on
-    - name: "service start/stop/status acc"
-      run: |
-        set -o errexit
-        set -o pipefail
-        set -o nounset
-        set -o xtrace   
-        sudo service acct start
-        sudo service acct status        
-        sudo service acct stop
-        sudo service acct status
+
+
 
   # ubuntu-1604-job:
   #   name: "osquery on ubuntu-16.04"
