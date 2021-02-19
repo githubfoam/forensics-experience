@@ -47,7 +47,8 @@ jobs:
         set -o errexit
         set -o pipefail
         set -o nounset
-        set -o xtrace      
+        set -o xtrace
+        sa -V      
         #Show each of the programs
         sudo sa -a
         #sa will print information about all of the commands in the acct file
@@ -75,10 +76,11 @@ jobs:
         set -o errexit
         set -o pipefail
         set -o nounset
-        set -o xtrace                       
+        set -o xtrace
+        ac -V                       
         #prints out a report of connect time (in hours) based on the logins/logouts in the current wtmp file
         ac -d
-        #rint total time for each users 
+        #print total time for each users 
         ac -p  
     - name: "lastcomm command"
       run: |
@@ -130,12 +132,20 @@ jobs:
         # sudo /usr/sbin/accton off
         # sudo systemctl status acct
         # sudo /usr/sbin/accton on
+        sudo service acct status
         sudo systemctl status acct
         sudo systemctl stop acct
         # sudo systemctl status acct
         # sudo systemctl start acct
         # sudo systemctl status acct
         #chkconfig acct on
+    - name: "service start/stop/status acc"
+      run: |
+        set -o errexit
+        set -o pipefail
+        set -o nounset
+        set -o xtrace   
+        sudo service acct status        
 
   # ubuntu-1604-job:
   #   name: "osquery on ubuntu-16.04"
