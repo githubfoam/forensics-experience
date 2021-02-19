@@ -133,8 +133,8 @@ jobs:
         sudo systemctl status acct
         sudo systemctl stop acct
         sudo systemctl status acct
-        sudo systemctl start acct
-        sudo systemctl status acct
+        # sudo systemctl start acct
+        # sudo systemctl status acct
         #chkconfig acct on
 
   # ubuntu-1604-job:
