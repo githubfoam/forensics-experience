@@ -39,5 +39,7 @@ https://github.com/emantas/gryphon_dft
 ~~~~
 ~~~~
 process accounting on Linux
+RHEL :  yum install psacct
+Ubuntu : sudo apt-get install acct
 https://man7.org/linux/man-pages/man5/acct.5.html
 ~~~~

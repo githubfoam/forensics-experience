@@ -57,12 +57,62 @@ jobs:
         set -o pipefail
         set -o nounset
         set -o xtrace      
-        ls -lai /var/log/account   
-        ls -lai /var/log/account/pacct
-        sudo ls -lai /usr/sbin/a*
+        # ls -lai /var/log/account   
+        # ls -lai /var/log/account/pacct
+        # sudo ls -lai /usr/sbin/a*
         sudo dump-acct /var/log/account/pacct | tail
         sudo dump-acct /var/log/account/pacct | tail -5
-        sudo dump-acct /var/log/account/pacct | awk -F'|' '$6 ~ / 1000$/'
+        # sudo dump-acct /var/log/account/pacct | awk -F'|' '$6 ~ / 1000$/'
+        systemctl status acct
+        sudo /usr/sbin/accton off
+        systemctl status acct
+        sudo /usr/sbin/accton on
+        systemctl status acct
+        systemctl stop acct
+        systemctl status acct
+        systemctl start acct
+        systemctl status acct
+        #chkconfig acct on
+        #sa will print information about all of the commands in the acct file
+        sa 
+        #print the number of processes and number of CPU minutes on a per-user basis
+        sa -m 
+        #Show userid and command name executed by each user 
+        sa -u
+    - name: "ac command"
+      run: |
+        set -o errexit
+        set -o pipefail
+        set -o nounset
+        set -o xtrace                       
+        #prints out a report of connect time (in hours) based on the logins/logouts in the current wtmp file
+        ac -d
+        #rint total time for each users 
+        ac -p  
+    - name: "lastcomm command"
+      run: |
+        set -o errexit
+        set -o pipefail
+        set -o nounset
+        set -o xtrace                       
+        #prints out information about previously executed commands, it uses the file acct
+        #Find the commands executed by the user test1
+        #lastcomm test1
+        #print info about all of the commands in acct(the record file)
+        #lastcomm
+        #finding which user has added the new user
+        #lastcomm adduser   
+    - name: "last command"
+      run: |
+        set -o errexit
+        set -o pipefail
+        set -o nounset
+        set -o xtrace                       
+        #searches back through the file /var/log/wtmp
+        #displays a list of all users logged in (and out) since that file was created
+        #the file on the Linux, Solaris, and BSD operating systems that keeps a history of all logins and logouts
+        #/var/log/wtmp
+        last        
 
   # ubuntu-1604-job:
   #   name: "osquery on ubuntu-16.04"
