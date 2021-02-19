@@ -42,147 +42,213 @@ jobs:
         # set -o nounset
         # set -o xtrace      
         sudo sa -u | grep runner # averages for the all the activity for this server overtime        
-        #combined total for a specific user
-        #sudo sa -u |grep username|awk ‘BEGIN{TOTAL=0}{TOTAL=TOTAL+$2}END{print TOTAL}’
-    - name: "Show each of the programs"
-      run: |
-        set -o errexit
-        set -o pipefail
-        set -o nounset
-        set -o xtrace      
-        sudo sa -a       
-
-
-  ubuntu-1604-job:
-    name: "osquery on ubuntu-16.04"
-    runs-on: ubuntu-16.04
-    steps:
-    - uses: actions/checkout@v2
-    - name: "os fingerprinting"
-      run: hostnamectl status  
-    - name: "Install process accounting "
+    - name: "sa command"
       run: |
         set -o errexit
         set -o pipefail
         set -o nounset
         set -o xtrace
-        echo "=============process accounting on Linux=============="
-        sudo apt-get update -qq
-        sudo apt-get install acct -qqy
-        whoami #runner
-        sudo sa -m # averages for the all the activity for this server overtime        
-        # sudo /usr/sbin/accton on
-        # sudo dump-acct /var/log/account/pacct | tail
-    - name: "Show averages for the all the activity for this server overtime"
-      run: |
-        set -o errexit
-        set -o pipefail
-        set -o nounset
-        set -o xtrace      
-        sudo sa -m # averages for the all the activity for this server overtime        
-    - name: "Show  sum of the system and user time in cpu minutes for specific commands"
-      run: |
-        # set -o errexit
-        # set -o pipefail
-        # set -o nounset
-        # set -o xtrace      
-        sudo sa -u | grep runner # averages for the all the activity for this server overtime        
-        #combined total for a specific user
-        #sudo sa -u |grep username|awk ‘BEGIN{TOTAL=0}{TOTAL=TOTAL+$2}END{print TOTAL}’
-    - name: "Show each of the programs"
-      run: |
-        set -o errexit
-        set -o pipefail
-        set -o nounset
-        set -o xtrace      
+        sa -V      
+        #Show each of the programs
         sudo sa -a
-
-  ubuntu-1804-job:
-    name: "process accounting  on ubuntu-18.04"
-    runs-on: ubuntu-18.04
-    steps:
-    - uses: actions/checkout@v2
-    - name: "os fingerprinting"
-      run: hostnamectl status  
-    - name: "Install process accounting "
+        #sa will print information about all of the commands in the acct file
+        sa 
+        #print the number of processes and number of CPU minutes on a per-user basis
+        sa -m 
+        #Show userid and command name executed by each user 
+        sa -u
+        #combined total for a specific user
+        #sudo sa -u |grep username|awk ‘BEGIN{TOTAL=0}{TOTAL=TOTAL+$2}END{print TOTAL}’               
+    - name: "dump-acct command"
+      run: |
+        set -o errexit
+        set -o pipefail
+        set -o nounset
+        set -o xtrace      
+        # ls -lai /var/log/account   
+        # ls -lai /var/log/account/pacct
+        # sudo ls -lai /usr/sbin/a*
+        sudo dump-acct /var/log/account/pacct | tail
+        sudo dump-acct /var/log/account/pacct | tail -5
+        # sudo dump-acct /var/log/account/pacct | awk -F'|' '$6 ~ / 1000$/'
+    - name: "ac command"
       run: |
         set -o errexit
         set -o pipefail
         set -o nounset
         set -o xtrace
-        echo "=============process accounting on Linux=============="
-        sudo apt-get update -qq
-        sudo apt-get install acct -qqy
-        whoami #runner
-        sudo sa -m # averages for the all the activity for this server overtime        
-        # sudo /usr/sbin/accton on
-        # sudo dump-acct /var/log/account/pacct | tail
-    - name: "Show averages for the all the activity for this server overtime"
+        ac -V                       
+        #prints out a report of connect time (in hours) based on the logins/logouts in the current wtmp file
+        ac -d
+        #print total time for each users 
+        ac -p  
+    - name: "lastcomm command"
+      run: |
+        set -o errexit
+        set -o pipefail
+        set -o nounset
+        set -o xtrace                       
+        #prints out information about previously executed commands, it uses the file acct
+        #Find the commands executed by the user test1
+        lastcomm runner
+        #print info about all of the commands in acct(the record file)
+        lastcomm
+        #finding which user has run "sa" command
+        lastcomm sa   
+    - name: "last command"
+      run: |
+        set -o errexit
+        set -o pipefail
+        set -o nounset
+        set -o xtrace                       
+        #searches back through the file /var/log/wtmp
+        #displays a list of all users logged in (and out) since that file was created
+        #the file on the Linux, Solaris, and BSD operating systems that keeps a history of all logins and logouts
+        #/var/log/wtmp
+        last        
+    - name: "start/stop/status acc"
       run: |
         set -o errexit
         set -o pipefail
         set -o nounset
         set -o xtrace      
-        sudo sa -m # averages for the all the activity for this server overtime        
-    - name: "Show  sum of the system and user time in cpu minutes for specific commands"
-      run: |
-        # set -o errexit
-        # set -o pipefail
-        # set -o nounset
-        # set -o xtrace      
-        sudo sa -u | grep runner # averages for the all the activity for this server overtime        
-        #combined total for a specific user
-        #sudo sa -u |grep username|awk ‘BEGIN{TOTAL=0}{TOTAL=TOTAL+$2}END{print TOTAL}’
-    - name: "Show each of the programs"
-      run: |
-        set -o errexit
-        set -o pipefail
-        set -o nounset
-        set -o xtrace      
-        sudo sa -a
+        sudo systemctl status acct
+        sudo /usr/sbin/accton off
+        sudo systemctl status acct
 
-  ubuntu-2004-job:
-    name: "process accounting on ubuntu-20.04"
-    runs-on: ubuntu-20.04
-    steps:
-    - uses: actions/checkout@v2
-    - name: "os fingerprinting"
-      run: hostnamectl status 
-    - name: "Install process accounting "
-      run: |
-        set -o errexit
-        set -o pipefail
-        set -o nounset
-        set -o xtrace
-        echo "=============process accounting on Linux=============="
-        sudo apt-get update -qq
-        sudo apt-get install acct -qqy
-        whoami #runner
-        sudo sa -m # averages for the all the activity for this server overtime        
-        # sudo /usr/sbin/accton on
-        # sudo dump-acct /var/log/account/pacct | tail
-    - name: "Show averages for the all the activity for this server overtime"
-      run: |
-        set -o errexit
-        set -o pipefail
-        set -o nounset
-        set -o xtrace      
-        sudo sa -m # averages for the all the activity for this server overtime        
-    - name: "Show  sum of the system and user time in cpu minutes for specific commands"
-      run: |
-        # set -o errexit
-        # set -o pipefail
-        # set -o nounset
-        # set -o xtrace      
-        sudo sa -u | grep runner # averages for the all the activity for this server overtime        
-        #combined total for a specific user
-        #sudo sa -u |grep username|awk ‘BEGIN{TOTAL=0}{TOTAL=TOTAL+$2}END{print TOTAL}’
-    - name: "Show each of the programs"
-      run: |
-        set -o errexit
-        set -o pipefail
-        set -o nounset
-        set -o xtrace      
-        sudo sa -a
+
+
+  # ubuntu-1604-job:
+  #   name: "osquery on ubuntu-16.04"
+  #   runs-on: ubuntu-16.04
+  #   steps:
+  #   - uses: actions/checkout@v2
+  #   - name: "os fingerprinting"
+  #     run: hostnamectl status  
+  #   - name: "Install process accounting "
+  #     run: |
+  #       set -o errexit
+  #       set -o pipefail
+  #       set -o nounset
+  #       set -o xtrace
+  #       echo "=============process accounting on Linux=============="
+  #       sudo apt-get update -qq
+  #       sudo apt-get install acct -qqy
+  #       whoami #runner
+  #       sudo sa -m # averages for the all the activity for this server overtime        
+  #       # sudo /usr/sbin/accton on
+  #       # sudo dump-acct /var/log/account/pacct | tail
+  #   - name: "Show averages for the all the activity for this server overtime"
+  #     run: |
+  #       set -o errexit
+  #       set -o pipefail
+  #       set -o nounset
+  #       set -o xtrace      
+  #       sudo sa -m # averages for the all the activity for this server overtime        
+  #   - name: "Show  sum of the system and user time in cpu minutes for specific commands"
+  #     run: |
+  #       # set -o errexit
+  #       # set -o pipefail
+  #       # set -o nounset
+  #       # set -o xtrace      
+  #       sudo sa -u | grep runner # averages for the all the activity for this server overtime        
+  #       #combined total for a specific user
+  #       #sudo sa -u |grep username|awk ‘BEGIN{TOTAL=0}{TOTAL=TOTAL+$2}END{print TOTAL}’
+  #   - name: "Show each of the programs"
+  #     run: |
+  #       set -o errexit
+  #       set -o pipefail
+  #       set -o nounset
+  #       set -o xtrace      
+  #       sudo sa -a
+ 
+
+  # ubuntu-1804-job:
+  #   name: "process accounting  on ubuntu-18.04"
+  #   runs-on: ubuntu-18.04
+  #   steps:
+  #   - uses: actions/checkout@v2
+  #   - name: "os fingerprinting"
+  #     run: hostnamectl status  
+  #   - name: "Install process accounting "
+  #     run: |
+  #       set -o errexit
+  #       set -o pipefail
+  #       set -o nounset
+  #       set -o xtrace
+  #       echo "=============process accounting on Linux=============="
+  #       sudo apt-get update -qq
+  #       sudo apt-get install acct -qqy
+  #       whoami #runner
+  #       sudo sa -m # averages for the all the activity for this server overtime        
+  #       # sudo /usr/sbin/accton on
+  #       # sudo dump-acct /var/log/account/pacct | tail
+  #   - name: "Show averages for the all the activity for this server overtime"
+  #     run: |
+  #       set -o errexit
+  #       set -o pipefail
+  #       set -o nounset
+  #       set -o xtrace      
+  #       sudo sa -m # averages for the all the activity for this server overtime        
+  #   - name: "Show  sum of the system and user time in cpu minutes for specific commands"
+  #     run: |
+  #       # set -o errexit
+  #       # set -o pipefail
+  #       # set -o nounset
+  #       # set -o xtrace      
+  #       sudo sa -u | grep runner # averages for the all the activity for this server overtime        
+  #       #combined total for a specific user
+  #       #sudo sa -u |grep username|awk ‘BEGIN{TOTAL=0}{TOTAL=TOTAL+$2}END{print TOTAL}’
+  #   - name: "Show each of the programs"
+  #     run: |
+  #       set -o errexit
+  #       set -o pipefail
+  #       set -o nounset
+  #       set -o xtrace      
+  #       sudo sa -a
+
+  # ubuntu-2004-job:
+  #   name: "process accounting on ubuntu-20.04"
+  #   runs-on: ubuntu-20.04
+  #   steps:
+  #   - uses: actions/checkout@v2
+  #   - name: "os fingerprinting"
+  #     run: hostnamectl status 
+  #   - name: "Install process accounting "
+  #     run: |
+  #       set -o errexit
+  #       set -o pipefail
+  #       set -o nounset
+  #       set -o xtrace
+  #       echo "=============process accounting on Linux=============="
+  #       sudo apt-get update -qq
+  #       sudo apt-get install acct -qqy
+  #       whoami #runner
+  #       sudo sa -m # averages for the all the activity for this server overtime        
+  #       # sudo /usr/sbin/accton on
+  #       # sudo dump-acct /var/log/account/pacct | tail
+  #   - name: "Show averages for the all the activity for this server overtime"
+  #     run: |
+  #       set -o errexit
+  #       set -o pipefail
+  #       set -o nounset
+  #       set -o xtrace      
+  #       sudo sa -m # averages for the all the activity for this server overtime        
+  #   - name: "Show  sum of the system and user time in cpu minutes for specific commands"
+  #     run: |
+  #       # set -o errexit
+  #       # set -o pipefail
+  #       # set -o nounset
+  #       # set -o xtrace      
+  #       sudo sa -u | grep runner # averages for the all the activity for this server overtime        
+  #       #combined total for a specific user
+  #       #sudo sa -u |grep username|awk ‘BEGIN{TOTAL=0}{TOTAL=TOTAL+$2}END{print TOTAL}’
+  #   - name: "Show each of the programs"
+  #     run: |
+  #       set -o errexit
+  #       set -o pipefail
+  #       set -o nounset
+  #       set -o xtrace      
+  #       sudo sa -a
 
 
