@@ -122,10 +122,10 @@ jobs:
         #chkconfig acct on
     - name: "start/stop/status acc"
       run: |
-        set -o errexit
-        set -o pipefail
-        set -o nounset
-        set -o xtrace      
+        # set -o errexit
+        # set -o pipefail
+        # set -o nounset
+        # set -o xtrace      
         # sudo systemctl status acct
         # sudo /usr/sbin/accton off
         # sudo systemctl status acct
